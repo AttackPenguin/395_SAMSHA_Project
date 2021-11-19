@@ -36,33 +36,6 @@ def main():
 
 def permutation_analysis_full_feature_set(file_name: str):
 
-    # # Get categorical data that is binary
-    # binary_category_cols = [
-    #     'ALCFLG', 'COKEFLG', 'MARFLG', 'HERFLG',
-    #     'METHFLG', 'OPSYNFLG', 'MTHAMFLG', 'BENZFLG'
-    # ]
-    #
-    # # Get categorical data with no missing datapoints:
-    # complete_category_cols = [
-    #     'SERVICES', 'ALCDRUG'
-    # ]
-    #
-    # # Get categorical data with missing datapoints
-    # incomplete_category_cols = [
-    #     'GENDER', 'RACE', 'ETHNIC', 'MARSTAT', 'EDUC', 'EMPLOY', 'EMPLOY_D',
-    #     'DETNLF', 'DETNLF_D', 'PREG', 'VET', 'LIVARAG', 'LIVARAG_D', 'PRIMINC',
-    #     'ARRESTS', 'ARRESTS_D', 'PSOURCE', 'DETCRIM', 'NOPRIOR', 'DSMCRIT',
-    #     'PSYPROB', 'HLTHINS', 'PRIMPAY', 'METHUSE', 'IDU'
-    # ]
-    #
-    # incomplete_ordinal_cols = [
-    #     'DAYWAIT', 'FREQ_ATND_SELF_HELP', 'FREQ_ATND_SELF_HELP_D'
-    # ]
-    #
-    # complete_ordinal_cols = [
-    #     'AGE'
-    # ]
-
     destination = os.path.join(
         classifier_directory, file_name
     )
@@ -201,7 +174,7 @@ def train_classifier_full_feature_set(raw_data: pd.DataFrame,
 
     rf_clf = RandomForestClassifier(
         n_jobs=10, verbose=3,
-        n_estimators=10, criterion='entropy',
+        n_estimators=1000, criterion='entropy',
         max_depth=None, max_features='sqrt',
         max_samples=None, class_weight='balanced_subsample'
     )
