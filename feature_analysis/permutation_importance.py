@@ -25,10 +25,10 @@ classifier_directory = \
 
 
 def main():
-    # train_classifier_full_feature_set(
-    #     get_2019_samsha_data(data_directory),
-    #     "Classifier 1, Full Data Set, Full Feature Set"
-    # )
+    train_classifier_full_feature_set(
+        get_2019_samsha_data(data_directory),
+        "Classifier 1, Full Data Set, Full Feature Set"
+    )
     permutation_analysis_full_feature_set(
         "Classifier 1, Full Data Set, Full Feature Set"
     )
