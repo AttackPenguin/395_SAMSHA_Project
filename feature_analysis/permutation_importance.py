@@ -25,10 +25,10 @@ classifier_directory = \
 
 
 def main():
-    train_classifier_full_feature_set(
-        get_2019_samsha_data(data_directory),
-        "Classifier 1, Full Data Set, Full Feature Set"
-    )
+    # train_classifier_full_feature_set(
+    #     get_2019_samsha_data(data_directory),
+    #     "Classifier 1, Full Data Set, Full Feature Set"
+    # )
     permutation_analysis_full_feature_set(
         "Classifier 1, Full Data Set, Full Feature Set"
     )
@@ -86,7 +86,7 @@ def permutation_analysis_full_feature_set(file_name: str):
     display.figure_.savefig(destination)
 
     result = permutation_importance(
-        clf, X_test, y_test, n_repeats=50, n_jobs=10
+        clf, X_test, y_test, n_repeats=20, n_jobs=10
     )
     sorted_idx = result.importances_mean.argsort()
 
@@ -101,7 +101,7 @@ def permutation_analysis_full_feature_set(file_name: str):
     plt.show()
     destination = os.path.join(
         performance_data_directory,
-        file_name + ' Confusion Matrix.png'
+        file_name + 'Feature Importance.png'
     )
     display.figure_.savefig(destination)
 
