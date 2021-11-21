@@ -22,9 +22,9 @@ import parameters as p
 
 data_directory = p.DATA_DIRECTORY
 performance_data_directory = \
-    os.path.join(p.PERFORMANCE_DATA_DIRECTORY, 'Permutation Importance')
+    os.path.join(p.PERFORMANCE_DATA_DIRECTORY, 'Final Code')
 classifier_directory = \
-    os.path.join(p.CLASSIFIER_DIRECTORY, 'permutation_importance')
+    os.path.join(p.CLASSIFIER_DIRECTORY, 'final_code')
 
 
 def main():
@@ -32,30 +32,66 @@ def main():
     start_time = pd.Timestamp.now()
     print(f"Started at {start_time}")
 
-    # destination = os.path.join(
-    #     classifier_directory, "Classifier 1, Full Data Set, Full Feature Set"
-    # )
-    # with open(destination, 'rb') as file:
-    #     preprocessing, rf_clf, X_train, X_test, y_train, y_test \
-    #         = pickle.load(file)
-    #
-    # results = permutation_feature_importance(
-    #     preprocessing, rf_clf, roc_auc_score, X_test, y_test, 20,
-    #     file_name='Permutation Feature Importance.pickle'
-    # )
+    ############################################################################
 
     destination = os.path.join(
-        performance_data_directory, "Permutation Feature Importance.pickle"
+        classifier_directory, "rf_prep_02a"
+    )
+    with open(destination, 'rb') as file:
+        preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
+            = pickle.load(file)
+
+    results = permutation_feature_importance(
+        preprocessing, rf_clf, roc_auc_score, feature_labels,
+        X_test, y_test, 20,
+        file_name='Permutation Feature Importance, Preprocessor 02a.pickle'
+    )
+
+    destination = os.path.join(
+        performance_data_directory, "Permutation Feature Importance, "
+                                    "Preprocessor 02a.pickle"
     )
     with open(destination, 'rb') as file:
         results = pickle.load(file)
 
     fig_pf_importance(results,
-                      'Fig XX: Permutation Feature Importance',
-                      'Permutation Feature Importance')
+                      'Fig XX: Permutation Feature Importance, Preprocessor '
+                      '02a',
+                      'Permutation Feature Importance, Preprocessor 02a')
 
-    finish_time = pd.Timestamp.now()
-    print(f"Run time = {finish_time}")
+    ############################################################################
+
+    destination = os.path.join(
+        classifier_directory, "rf_prep_02b"
+    )
+    with open(destination, 'rb') as file:
+        preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
+            = pickle.load(file)
+
+    results = permutation_feature_importance(
+        preprocessing, rf_clf, roc_auc_score, feature_labels,
+        X_test, y_test, 20,
+        file_name='Permutation Feature Importance, Preprocessor 02b.pickle'
+    )
+
+    destination = os.path.join(
+        performance_data_directory, "Permutation Feature Importance, "
+                                    "Preprocessor 02b.pickle"
+    )
+    with open(destination, 'rb') as file:
+        results = pickle.load(file)
+
+    fig_pf_importance(results,
+                      'Fig XX: Permutation Feature Importance, Preprocessor '
+                      '02b',
+                      'Permutation Feature Importance, Preprocessor 02b')
+
+    ############################################################################
+
+    end_time = pd.Timestamp.now()
+    print(f"Finished at {end_time}")
+    print(f"Run time {(end_time - start_time).total_seconds() / 60:.2f} "
+          f"minutes.")
 
 
 def fig_pf_importance(results: dict[str, list[float]],
@@ -72,6 +108,11 @@ def fig_pf_importance(results: dict[str, list[float]],
         labels=np.array(list(results.keys()))[sorted_idx]
     )
     ax.set_title(title)
+    ax.grid(axis='x')
+    ax.set_xticks(
+        [0.000, 0.0025, 0.005, 0.0075, 0.010, 0.020, 0.030,
+         0.040, 0.050]
+    )
     fig.tight_layout()
     plt.show()
     destination = os.path.join(
@@ -84,35 +125,36 @@ def fig_pf_importance(results: dict[str, list[float]],
 def permutation_feature_importance(preprocessor,
                                    classifier,
                                    scorer,
-                                   features: pd.DataFrame,
-                                   targets: pd.Series,
+                                   features,
+                                   X_score: pd.DataFrame,
+                                   y_score: pd.Series,
                                    iterations: int = 10,
                                    file_name: str | bool = False):
 
-    results = {col: list() for col in features.columns}
+    results = {feature: list() for feature in features}
 
     print(f"Generating initial baseline score...")
-    t_features = preprocessor.transform(features)
-    baseline_score = scorer(targets, classifier.predict_proba(t_features)[:, 1])
+    t_X_score = preprocessor.transform(X_score)
+    baseline_score = scorer(y_score, classifier.predict_proba(t_X_score)[:, 1])
     print(f"Initial baseline score: {baseline_score}")
 
     for feature in results.keys():
         print(f"\nBeginning analysis of feature {feature}...")
         for i in range(1, iterations+1):
             print(f"\tIteration {i} of {iterations}...")
-            test_features = features.copy(True)
+            test_features = X_score.copy(True)
             test_features[feature] = \
                 np.random.permutation(test_features[feature])
             t_test_features = preprocessor.transform(test_features)
-            score = scorer(targets,
+            score = scorer(y_score,
                            classifier.predict_proba(t_test_features)[:, 1])
             results[feature].append(baseline_score-score)
         print(f"Analysis of feature {feature} complete.")
         print(f"Mean score delta = {np.mean(results[feature])}")
 
-    if not file_name:
+    if file_name:
         destination = os.path.join(
-            performance_data_directory, file_name + '.png'
+            performance_data_directory, file_name
         )
         with open(destination, 'wb') as file:
             pickle.dump(results, file)

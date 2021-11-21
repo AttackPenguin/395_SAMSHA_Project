@@ -13,10 +13,14 @@ data_directory = "/home/denis/Desktop/CSYS 395B - Machine Learning/Project/" \
 
 def main():
     data = get_2019_samsha_data(data_directory)
-    print_feature_value_data(data, 'EMPLOY', 1, 'REASON')
-    print_feature_value_data(data, 'EMPLOY', 2, 'REASON')
-    print_feature_value_data(data, 'EMPLOY', 3, 'REASON')
-    print_feature_value_data(data, 'EMPLOY', 4, 'REASON')
+    print_feature_value_data(data, 'SERVICES', 1, 'REASON')
+    print_feature_value_data(data, 'SERVICES', 2, 'REASON')
+    print_feature_value_data(data, 'SERVICES', 3, 'REASON')
+    print_feature_value_data(data, 'SERVICES', 4, 'REASON')
+    print_feature_value_data(data, 'SERVICES', 5, 'REASON')
+    print_feature_value_data(data, 'SERVICES', 6, 'REASON')
+    print_feature_value_data(data, 'SERVICES', 7, 'REASON')
+    print_feature_value_data(data, 'SERVICES', 8, 'REASON')
 
 
 def get_feature_value_data(data: pd.DataFrame,

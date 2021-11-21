@@ -72,7 +72,222 @@ def create_preprocessor_01():
         ], n_jobs=10
     )
 
-    return preprocessor
+    features = (binary_category_cols +
+                complete_category_cols +
+                incomplete_category_cols +
+                incomplete_ordinal_cols +
+                ratio_columns)
+
+    return preprocessor, features
+
+
+def create_preprocessor_01_opt():
+    """
+    Initial preprocessor, with pruning of features with negative or zero mean
+    permutation feature importance for area under ROC.
+    In theory, this should be our top performing classifier.
+    :return:
+    """
+
+    # Get categorical data that is binary
+    binary_category_cols = [
+        'COKEFLG', 'MARFLG',
+        'OPSYNFLG', 'MTHAMFLG', 'BENZFLG'
+    ]
+
+    # Get categorical data with no missing datapoints:
+    complete_category_cols = [
+        'SERVICES', 'ALCDRUG'
+    ]
+
+    # Get categorical data with missing datapoints
+    incomplete_category_cols = [
+        'GENDER', 'RACE', 'ETHNIC', 'MARSTAT', 'EDUC', 'EMPLOY', 'EMPLOY_D',
+        'DETNLF', 'DETNLF_D', 'VET', 'LIVARAG', 'LIVARAG_D', 'PRIMINC',
+        'ARRESTS', 'ARRESTS_D', 'PSOURCE', 'DETCRIM', 'NOPRIOR', 'DSMCRIT',
+        'PSYPROB', 'HLTHINS', 'PRIMPAY', 'METHUSE', 'IDU'
+    ]
+
+    incomplete_ordinal_cols = [
+        'DAYWAIT', 'FREQ_ATND_SELF_HELP', 'FREQ_ATND_SELF_HELP_D'
+    ]
+
+    ratio_columns = [
+        'AGE'
+    ]
+
+    inc_ordinal_pipe = Pipeline([
+        ('imputer',
+         SimpleImputer(missing_values=-9, strategy='most_frequent')),
+        ('inc_ord', OrdinalEncoder())
+    ])
+
+    preprocessor = ColumnTransformer(
+        [
+            ('binary',
+             OneHotEncoder(drop='if_binary', sparse=False),
+             binary_category_cols),
+            ('complete',
+             OneHotEncoder(sparse=False),
+             complete_category_cols),
+            ('inc_cat',
+             OneHotEncoder(drop=[-9] * len(incomplete_category_cols),
+                           sparse=False),
+             incomplete_category_cols),
+            ('inc_ord',
+             inc_ordinal_pipe,
+             incomplete_ordinal_cols),
+            ('ratio',
+             AgeRatioTransformer(),
+             ratio_columns)
+        ], n_jobs=10
+    )
+
+    features = (binary_category_cols +
+                complete_category_cols +
+                incomplete_category_cols +
+                incomplete_ordinal_cols +
+                ratio_columns)
+
+    return preprocessor, features
+
+
+def create_preprocessor_02a():
+    """
+    Second stage. Features with an ROC permutation importance of under 0.0025
+    pruned.
+    :return:
+    """
+
+    # Get categorical data that is binary
+    binary_category_cols = [
+
+    ]
+
+    # Get categorical data with no missing datapoints:
+    complete_category_cols = [
+        'SERVICES', 'ALCDRUG'
+    ]
+
+    # Get categorical data with missing datapoints
+    incomplete_category_cols = [
+        'RACE', 'ETHNIC', 'MARSTAT', 'EDUC', 'EMPLOY', 'EMPLOY_D',
+        'VET', 'LIVARAG', 'LIVARAG_D', 'PRIMINC',
+        'ARRESTS_D', 'PSOURCE', 'DETCRIM', 'NOPRIOR', 'DSMCRIT',
+        'PSYPROB', 'HLTHINS', 'PRIMPAY', 'METHUSE'
+    ]
+
+    incomplete_ordinal_cols = [
+        'DAYWAIT', 'FREQ_ATND_SELF_HELP', 'FREQ_ATND_SELF_HELP_D'
+    ]
+
+    ratio_columns = [
+        'AGE'
+    ]
+
+    inc_ordinal_pipe = Pipeline([
+        ('imputer',
+         SimpleImputer(missing_values=-9, strategy='most_frequent')),
+        ('inc_ord', OrdinalEncoder())
+    ])
+
+    preprocessor = ColumnTransformer(
+        [
+            ('binary',
+             OneHotEncoder(drop='if_binary', sparse=False),
+             binary_category_cols),
+            ('complete',
+             OneHotEncoder(sparse=False),
+             complete_category_cols),
+            ('inc_cat',
+             OneHotEncoder(drop=[-9] * len(incomplete_category_cols),
+                           sparse=False),
+             incomplete_category_cols),
+            ('inc_ord',
+             inc_ordinal_pipe,
+             incomplete_ordinal_cols),
+            ('ratio',
+             AgeRatioTransformer(),
+             ratio_columns)
+        ], n_jobs=10
+    )
+
+    features = (binary_category_cols +
+                complete_category_cols +
+                incomplete_category_cols +
+                incomplete_ordinal_cols +
+                ratio_columns)
+
+    return preprocessor, features
+
+
+def create_preprocessor_02b():
+    """
+    Second stage. Features with an ROC permutation importance of under 0.005
+    pruned.
+    :return:
+    """
+
+    # Get categorical data that is binary
+    binary_category_cols = [
+
+    ]
+
+    # Get categorical data with no missing datapoints:
+    complete_category_cols = [
+        'SERVICES'
+    ]
+
+    # Get categorical data with missing datapoints
+    incomplete_category_cols = [
+        'RACE', 'MARSTAT', 'EDUC', 'EMPLOY_D',
+        'VET', 'LIVARAG', 'LIVARAG_D', 'PRIMINC',
+        'ARRESTS_D', 'PSOURCE', 'NOPRIOR', 'DSMCRIT',
+        'PSYPROB', 'HLTHINS', 'PRIMPAY', 'METHUSE'
+    ]
+
+    incomplete_ordinal_cols = [
+        'FREQ_ATND_SELF_HELP_D'
+    ]
+
+    ratio_columns = [
+
+    ]
+
+    inc_ordinal_pipe = Pipeline([
+        ('imputer',
+         SimpleImputer(missing_values=-9, strategy='most_frequent')),
+        ('inc_ord', OrdinalEncoder())
+    ])
+
+    preprocessor = ColumnTransformer(
+        [
+            ('binary',
+             OneHotEncoder(drop='if_binary', sparse=False),
+             binary_category_cols),
+            ('complete',
+             OneHotEncoder(sparse=False),
+             complete_category_cols),
+            ('inc_cat',
+             OneHotEncoder(drop=[-9] * len(incomplete_category_cols),
+                           sparse=False),
+             incomplete_category_cols),
+            ('inc_ord',
+             inc_ordinal_pipe,
+             incomplete_ordinal_cols),
+            ('ratio',
+             AgeRatioTransformer(),
+             ratio_columns)
+        ], n_jobs=10
+    )
+
+    features = (binary_category_cols +
+                complete_category_cols +
+                incomplete_category_cols +
+                incomplete_ordinal_cols +
+                ratio_columns)
+
+    return preprocessor, features
 
 
 class AgeRatioTransformer(BaseEstimator, TransformerMixin):

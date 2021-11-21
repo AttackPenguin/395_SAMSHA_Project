@@ -26,22 +26,46 @@ def main():
     start_time = pd.Timestamp.now()
     print(f"Started at {start_time}")
 
-    downsampled_random_forest(preprocessors.create_preprocessor_01(),
-                              'rf_prep_01',
-                              'Random Forest, Preprocessor 01')
+    # preprocessor, feature_labels = preprocessors.create_preprocessor_01()
+    # downsampled_random_forest(preprocessor,
+    #                           feature_labels,
+    #                           'rf_prep_01',
+    #                           'Random Forest, Preprocessor 01')
+
+    preprocessor, feature_labels = preprocessors.create_preprocessor_01_opt()
+    downsampled_random_forest(preprocessor,
+                              feature_labels,
+                              'rf_prep_01_opt',
+                              'Random Forest, Preprocessor 01 Optimized')
+
+    # preprocessor, feature_labels = preprocessors.create_preprocessor_02a()
+    # downsampled_random_forest(preprocessor,
+    #                           feature_labels,
+    #                           'rf_prep_02a',
+    #                           'Random Forest, Preprocessor 02a')
+
+    # preprocessor, feature_labels = preprocessors.create_preprocessor_02b()
+    # downsampled_random_forest(preprocessor,
+    #                           feature_labels,
+    #                           'rf_prep_02b',
+    #                           'Random Forest, Preprocessor 02b')
 
     end_time = pd.Timestamp.now()
     print(f"Finished at {end_time}")
-    print(f"Run time {(end_time-start_time).total_seconds()/60} minutes.")
+    print(f"Run time {(end_time - start_time).total_seconds() / 60:.2f} "
+          f"minutes.")
 
 
 def downsampled_random_forest(preprocessor: ColumnTransformer,
+                              feature_labels: list[str],
                               filename: str,
                               filename_pretty: str):
     """
     Compensates for dramatic under-representation of desired target in data
     by breaking training data into two groups, based on target, then batch
     training on batches with equal representation of targets.
+    :param preprocessor:
+    :param features:
     :param filename:
     :param filename_pretty:
     :return:
@@ -57,7 +81,7 @@ def downsampled_random_forest(preprocessor: ColumnTransformer,
 
     X_train, X_test, y_train, y_test = \
         train_test_split(features, targets,
-                         test_size=0.1, stratify=targets)
+                         test_size=50_000, stratify=targets)
     t_X_train = preprocessor.fit_transform(X_train)
     t_X_test = preprocessor.transform(X_test)
 
@@ -118,7 +142,8 @@ def downsampled_random_forest(preprocessor: ColumnTransformer,
     display.figure_.savefig(destination)
     print(f"Figure saved to {destination}\n")
 
-    save_data = (preprocessor, clf, X_train, X_test, y_train, y_test)
+    save_data = (preprocessor, clf, feature_labels,
+                 X_train, X_test, y_train, y_test)
 
     destination = os.path.join(
         classifier_directory, filename
