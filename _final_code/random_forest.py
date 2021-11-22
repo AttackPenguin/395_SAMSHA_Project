@@ -26,24 +26,24 @@ def main():
     start_time = pd.Timestamp.now()
     print(f"Started at {start_time}")
 
-    # preprocessor, feature_labels = preprocessors.create_preprocessor_01()
-    # downsampled_random_forest(preprocessor,
-    #                           feature_labels,
-    #                           'rf_prep_01',
-    #                           'Random Forest, Preprocessor 01')
-
-    preprocessor, feature_labels = preprocessors.create_preprocessor_01_opt()
+    preprocessor, feature_labels = preprocessors.create_preprocessor_01()
     downsampled_random_forest(preprocessor,
                               feature_labels,
-                              'rf_prep_01_opt',
-                              'Random Forest, Preprocessor 01 Optimized')
+                              'rf_prep_01',
+                              'Random Forest, Preprocessor 01')
 
+    # preprocessor, feature_labels = preprocessors.create_preprocessor_01_opt()
+    # downsampled_random_forest(preprocessor,
+    #                           feature_labels,
+    #                           'rf_prep_01_opt',
+    #                           'Random Forest, Preprocessor 01 Optimized')
+    #
     # preprocessor, feature_labels = preprocessors.create_preprocessor_02a()
     # downsampled_random_forest(preprocessor,
     #                           feature_labels,
     #                           'rf_prep_02a',
     #                           'Random Forest, Preprocessor 02a')
-
+    #
     # preprocessor, feature_labels = preprocessors.create_preprocessor_02b()
     # downsampled_random_forest(preprocessor,
     #                           feature_labels,

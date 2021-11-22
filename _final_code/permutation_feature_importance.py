@@ -35,7 +35,7 @@ def main():
     ############################################################################
 
     destination = os.path.join(
-        classifier_directory, "rf_prep_02a"
+        classifier_directory, "rf_prep_01"
     )
     with open(destination, 'rb') as file:
         preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
@@ -44,47 +44,103 @@ def main():
     results = permutation_feature_importance(
         preprocessing, rf_clf, roc_auc_score, feature_labels,
         X_test, y_test, 20,
-        file_name='Permutation Feature Importance, Preprocessor 02a.pickle'
+        file_name='Permutation Feature Importance, Preprocessor 01.pickle'
     )
 
     destination = os.path.join(
         performance_data_directory, "Permutation Feature Importance, "
-                                    "Preprocessor 02a.pickle"
+                                    "Preprocessor 01.pickle"
     )
     with open(destination, 'rb') as file:
         results = pickle.load(file)
 
     fig_pf_importance(results,
                       'Fig XX: Permutation Feature Importance, Preprocessor '
-                      '02a',
-                      'Permutation Feature Importance, Preprocessor 02a')
+                      '01',
+                      'Permutation Feature Importance, Preprocessor 01')
 
     ############################################################################
 
-    destination = os.path.join(
-        classifier_directory, "rf_prep_02b"
-    )
-    with open(destination, 'rb') as file:
-        preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
-            = pickle.load(file)
+    # destination = os.path.join(
+    #     classifier_directory, "rf_prep_01_opt"
+    # )
+    # with open(destination, 'rb') as file:
+    #     preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
+    #         = pickle.load(file)
+    #
+    # results = permutation_feature_importance(
+    #     preprocessing, rf_clf, roc_auc_score, feature_labels,
+    #     X_test, y_test, 20,
+    #     file_name='Permutation Feature Importance, Preprocessor 01 '
+    #               'Optimized.pickle'
+    # )
+    #
+    # destination = os.path.join(
+    #     performance_data_directory, "Permutation Feature Importance, "
+    #                                 "Preprocessor 01 Optimized.pickle"
+    # )
+    # with open(destination, 'rb') as file:
+    #     results = pickle.load(file)
+    #
+    # fig_pf_importance(results,
+    #                   'Fig XX: Permutation Feature Importance, Preprocessor '
+    #                   '01 Optimized',
+    #                   'Permutation Feature Importance, Preprocessor 01 '
+    #                   'Optimized')
 
-    results = permutation_feature_importance(
-        preprocessing, rf_clf, roc_auc_score, feature_labels,
-        X_test, y_test, 20,
-        file_name='Permutation Feature Importance, Preprocessor 02b.pickle'
-    )
+    ############################################################################
 
-    destination = os.path.join(
-        performance_data_directory, "Permutation Feature Importance, "
-                                    "Preprocessor 02b.pickle"
-    )
-    with open(destination, 'rb') as file:
-        results = pickle.load(file)
+    # destination = os.path.join(
+    #     classifier_directory, "rf_prep_02a"
+    # )
+    # with open(destination, 'rb') as file:
+    #     preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
+    #         = pickle.load(file)
+    #
+    # results = permutation_feature_importance(
+    #     preprocessing, rf_clf, roc_auc_score, feature_labels,
+    #     X_test, y_test, 20,
+    #     file_name='Permutation Feature Importance, Preprocessor 02a.pickle'
+    # )
+    #
+    # destination = os.path.join(
+    #     performance_data_directory, "Permutation Feature Importance, "
+    #                                 "Preprocessor 02a.pickle"
+    # )
+    # with open(destination, 'rb') as file:
+    #     results = pickle.load(file)
+    #
+    # fig_pf_importance(results,
+    #                   'Fig XX: Permutation Feature Importance, Preprocessor '
+    #                   '02a',
+    #                   'Permutation Feature Importance, Preprocessor 02a')
 
-    fig_pf_importance(results,
-                      'Fig XX: Permutation Feature Importance, Preprocessor '
-                      '02b',
-                      'Permutation Feature Importance, Preprocessor 02b')
+    ############################################################################
+
+    # destination = os.path.join(
+    #     classifier_directory, "rf_prep_02b"
+    # )
+    # with open(destination, 'rb') as file:
+    #     preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
+    #         = pickle.load(file)
+    #
+    # results = permutation_feature_importance(
+    #     preprocessing, rf_clf, roc_auc_score, feature_labels,
+    #     X_test, y_test, 20,
+    #     file_name='Permutation Feature Importance, Preprocessor 02b.pickle'
+    # )
+    #
+    # destination = os.path.join(
+    #     performance_data_directory, "Permutation Feature Importance, "
+    #                                 "Preprocessor 02b.pickle"
+    # )
+    # with open(destination, 'rb') as file:
+    #     results = pickle.load(file)
+    #
+    # fig_pf_importance(results,
+    #                   'Fig XX: Permutation Feature Importance, Preprocessor '
+    #                   '02b',
+    #                   'Permutation Feature Importance, Preprocessor 02b')
 
     ############################################################################
 
