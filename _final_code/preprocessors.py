@@ -86,7 +86,7 @@ def create_preprocessor_01_opt():
 
     # Get categorical data that is binary
     binary_category_cols = [
-        'COKEFLG', 'MARFLG',
+        'COKEFLG', 'MARFLG', 'HERFLG',
         'OPSYNFLG', 'MTHAMFLG', 'BENZFLG'
     ]
 
@@ -98,7 +98,7 @@ def create_preprocessor_01_opt():
     # Get categorical data with missing datapoints
     incomplete_category_cols = [
         'GENDER', 'RACE', 'ETHNIC', 'MARSTAT', 'EDUC', 'EMPLOY', 'EMPLOY_D',
-        'DETNLF', 'DETNLF_D', 'VET', 'LIVARAG', 'LIVARAG_D', 'PRIMINC',
+        'DETNLF', 'DETNLF_D', 'PREG', 'VET', 'LIVARAG', 'LIVARAG_D', 'PRIMINC',
         'ARRESTS', 'ARRESTS_D', 'PSOURCE', 'DETCRIM', 'NOPRIOR', 'DSMCRIT',
         'PSYPROB', 'HLTHINS', 'PRIMPAY', 'METHUSE', 'IDU'
     ]
@@ -152,7 +152,7 @@ def create_preprocessor_02a():
 
     # Get categorical data that is binary
     binary_category_cols = [
-
+        'MARFLG'
     ]
 
     # Get categorical data with no missing datapoints:
@@ -163,9 +163,9 @@ def create_preprocessor_02a():
     # Get categorical data with missing datapoints
     incomplete_category_cols = [
         'RACE', 'ETHNIC', 'MARSTAT', 'EDUC', 'EMPLOY', 'EMPLOY_D',
-        'VET', 'LIVARAG', 'LIVARAG_D', 'PRIMINC',
-        'ARRESTS_D', 'PSOURCE', 'DETCRIM', 'NOPRIOR', 'DSMCRIT',
-        'PSYPROB', 'HLTHINS', 'PRIMPAY', 'METHUSE'
+        'DETNLF', 'DETNLF_D', 'VET', 'LIVARAG', 'LIVARAG_D', 'PRIMINC',
+        'ARRESTS', 'ARRESTS_D', 'PSOURCE', 'DETCRIM', 'NOPRIOR', 'DSMCRIT',
+        'PSYPROB', 'HLTHINS', 'PRIMPAY', 'METHUSE', 'IDU'
     ]
 
     incomplete_ordinal_cols = [
@@ -228,17 +228,17 @@ def create_preprocessor_02b():
     # Get categorical data with missing datapoints
     incomplete_category_cols = [
         'RACE', 'MARSTAT', 'EDUC', 'EMPLOY_D',
-        'VET', 'LIVARAG', 'LIVARAG_D', 'PRIMINC',
-        'ARRESTS_D', 'PSOURCE', 'NOPRIOR', 'DSMCRIT',
+        'DETNLF', 'DETNLF_D', 'VET', 'LIVARAG', 'LIVARAG_D', 'PRIMINC',
+        'ARRESTS_D', 'PSOURCE', 'DETCRIM', 'NOPRIOR', 'DSMCRIT',
         'PSYPROB', 'HLTHINS', 'PRIMPAY', 'METHUSE'
     ]
 
     incomplete_ordinal_cols = [
-        'FREQ_ATND_SELF_HELP_D'
+        'DAYWAIT', 'FREQ_ATND_SELF_HELP_D'
     ]
 
     ratio_columns = [
-
+        'AGE'
     ]
 
     inc_ordinal_pipe = Pipeline([

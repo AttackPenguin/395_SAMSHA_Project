@@ -26,29 +26,63 @@ def main():
     start_time = pd.Timestamp.now()
     print(f"Started at {start_time}")
 
-    preprocessor, feature_labels = preprocessors.create_preprocessor_01()
+    ############################################################################
+
+    # target_file = os.path.join(data_directory, 'tedsd_puf_2019.csv')
+    # raw_data = pd.read_csv(target_file)
+    #
+    # targets = raw_data.pop('REASON')
+    # targets = np.array((targets == 3).astype(int))
+    # features = raw_data
+    #
+    # X_train, X_test, y_train, y_test = \
+    #     train_test_split(features, targets,
+    #                      test_size=0.1, stratify=targets)
+    #
+    # save_data = (X_train, X_test, y_train, y_test)
+    # destination = os.path.join(
+    #     classifier_directory, 'Split Data, Round 1.pickle'
+    # )
+    # with open(destination, 'wb') as file:
+    #     pickle.dump(save_data, file)
+
+    ############################################################################
+
+    destination = os.path.join(
+        classifier_directory, "Split Data, Round 1.pickle"
+    )
+    with open(destination, 'rb') as file:
+        X_train, X_test, y_train, y_test = pickle.load(file)
+
+    ############################################################################
+
+    # preprocessor, feature_labels = preprocessors.create_preprocessor_01()
+    # downsampled_random_forest(preprocessor,
+    #                           feature_labels,
+    #                           'rf_prep_01',
+    #                           'Random Forest, Preprocessor 01',
+    #                           X_train, X_test, y_train, y_test)
+
+    preprocessor, feature_labels = preprocessors.create_preprocessor_01_opt()
     downsampled_random_forest(preprocessor,
                               feature_labels,
-                              'rf_prep_01',
-                              'Random Forest, Preprocessor 01')
+                              'rf_prep_01_opt',
+                              'Random Forest, Preprocessor 01 Optimized',
+                              X_train, X_test, y_train, y_test)
 
-    # preprocessor, feature_labels = preprocessors.create_preprocessor_01_opt()
-    # downsampled_random_forest(preprocessor,
-    #                           feature_labels,
-    #                           'rf_prep_01_opt',
-    #                           'Random Forest, Preprocessor 01 Optimized')
-    #
-    # preprocessor, feature_labels = preprocessors.create_preprocessor_02a()
-    # downsampled_random_forest(preprocessor,
-    #                           feature_labels,
-    #                           'rf_prep_02a',
-    #                           'Random Forest, Preprocessor 02a')
-    #
-    # preprocessor, feature_labels = preprocessors.create_preprocessor_02b()
-    # downsampled_random_forest(preprocessor,
-    #                           feature_labels,
-    #                           'rf_prep_02b',
-    #                           'Random Forest, Preprocessor 02b')
+    preprocessor, feature_labels = preprocessors.create_preprocessor_02a()
+    downsampled_random_forest(preprocessor,
+                              feature_labels,
+                              'rf_prep_02a',
+                              'Random Forest, Preprocessor 02a',
+                              X_train, X_test, y_train, y_test)
+
+    preprocessor, feature_labels = preprocessors.create_preprocessor_02b()
+    downsampled_random_forest(preprocessor,
+                              feature_labels,
+                              'rf_prep_02b',
+                              'Random Forest, Preprocessor 02b',
+                              X_train, X_test, y_train, y_test)
 
     end_time = pd.Timestamp.now()
     print(f"Finished at {end_time}")
@@ -59,29 +93,26 @@ def main():
 def downsampled_random_forest(preprocessor: ColumnTransformer,
                               feature_labels: list[str],
                               filename: str,
-                              filename_pretty: str):
+                              filename_pretty: str,
+                              X_train: pd.DataFrame,
+                              X_test: pd.DataFrame,
+                              y_train: pd.DataFrame,
+                              y_test: pd.DataFrame):
     """
     Compensates for dramatic under-representation of desired target in data
     by breaking training data into two groups, based on target, then batch
     training on batches with equal representation of targets.
+    :param y_test:
+    :param y_train:
+    :param X_test:
+    :param X_train:
     :param preprocessor:
     :param features:
     :param filename:
     :param filename_pretty:
     :return:
     """
-    print("Setting up data...")
 
-    target_file = os.path.join(data_directory, 'tedsd_puf_2019.csv')
-    raw_data = pd.read_csv(target_file)
-
-    targets = raw_data.pop('REASON')
-    targets = np.array((targets == 3).astype(int))
-    features = raw_data
-
-    X_train, X_test, y_train, y_test = \
-        train_test_split(features, targets,
-                         test_size=50_000, stratify=targets)
     t_X_train = preprocessor.fit_transform(X_train)
     t_X_test = preprocessor.transform(X_test)
 
