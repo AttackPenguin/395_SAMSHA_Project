@@ -14,6 +14,7 @@ from sklearn.metrics import confusion_matrix, classification_report, \
 
 import parameters as p
 import preprocessors
+from subsampling import get_subsample
 
 data_directory = p.DATA_DIRECTORY
 performance_data_directory = \
@@ -23,6 +24,78 @@ classifier_directory = \
 
 
 def main():
+    subset_training()
+
+
+def subset_training():
+    start_time = pd.Timestamp.now()
+    print(f"Started at {start_time}")
+
+    ############################################################################
+
+    target_file = os.path.join(data_directory, 'tedsd_puf_2019.csv')
+    raw_data = pd.read_csv(target_file)
+
+
+
+    ############################################################################
+
+    # preprocessor, feature_labels = preprocessors.create_preprocessor_01()
+    # downsampled_random_forest(preprocessor,
+    #                           feature_labels,
+    #                           'rf_prep_01',
+    #                           'Random Forest, Preprocessor 01',
+    #                           X_train, X_test, y_train, y_test)
+
+    preprocessor, feature_labels = preprocessors.create_preprocessor_01_opt()
+    subsample = get_subsample(raw_data.copy(), feature_labels, 3)
+    targets = subsample.pop('REASON')
+    targets = np.array((targets == 3).astype(int))
+    X_train, X_test, y_train, y_test = \
+        train_test_split(subsample, targets,
+                         test_size=0.1, stratify=targets)
+    downsampled_random_forest(preprocessor,
+                              feature_labels,
+                              'rf_prep_01_opt_subsample',
+                              'Random Forest, Preprocessor 01 Optimized, '
+                              'Subsampled Data, Cutoff of 3',
+                              X_train, X_test, y_train, y_test)
+
+    preprocessor, feature_labels = preprocessors.create_preprocessor_02a()
+    subsample = get_subsample(raw_data.copy(), feature_labels, 3)
+    targets = subsample.pop('REASON')
+    targets = np.array((targets == 3).astype(int))
+    X_train, X_test, y_train, y_test = \
+        train_test_split(subsample, targets,
+                         test_size=0.1, stratify=targets)
+    downsampled_random_forest(preprocessor,
+                              feature_labels,
+                              'rf_prep_02a_subsample',
+                              'Random Forest, Preprocessor 02a, '
+                              'Subsampled Data, Cutoff of 3',
+                              X_train, X_test, y_train, y_test)
+
+    preprocessor, feature_labels = preprocessors.create_preprocessor_02b()
+    subsample = get_subsample(raw_data.copy(), feature_labels, 3)
+    targets = subsample.pop('REASON')
+    targets = np.array((targets == 3).astype(int))
+    X_train, X_test, y_train, y_test = \
+        train_test_split(subsample, targets,
+                         test_size=0.1, stratify=targets)
+    downsampled_random_forest(preprocessor,
+                              feature_labels,
+                              'rf_prep_02b_subsample',
+                              'Random Forest, Preprocessor 02b, '
+                              'Subsampled Data, Cutoff of 3',
+                              X_train, X_test, y_train, y_test)
+
+    end_time = pd.Timestamp.now()
+    print(f"Finished at {end_time}")
+    print(f"Run time {(end_time - start_time).total_seconds() / 60:.2f} "
+          f"minutes.")
+
+
+def initial_training():
     start_time = pd.Timestamp.now()
     print(f"Started at {start_time}")
 

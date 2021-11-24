@@ -9,6 +9,7 @@ PERFORMANCE_DATA_DIRECTORY = os.path.join(ROOT_DIR, "Performance Data")
 CLASSIFIER_DIRECTORY = os.path.join(
     "/home/denis/Data/PyCharm Extended Storage/SAMSHA Classifiers"
 )
+FINAL_DATA = os.path.join(ROOT_DIR, "_final_code", "Figures and Data")
 
 
 """
