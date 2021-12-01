@@ -36,8 +36,6 @@ def subset_training():
     target_file = os.path.join(data_directory, 'tedsd_puf_2019.csv')
     raw_data = pd.read_csv(target_file)
 
-
-
     ############################################################################
 
     # preprocessor, feature_labels = preprocessors.create_preprocessor_01()
@@ -59,7 +57,8 @@ def subset_training():
                               'rf_prep_01_opt_subsample',
                               'Random Forest, Preprocessor 01 Optimized, '
                               'Subsampled Data, Cutoff of 3',
-                              X_train, X_test, y_train, y_test)
+                              X_train, X_test, y_train, y_test,
+                              trees=1000)
 
     preprocessor, feature_labels = preprocessors.create_preprocessor_02a()
     subsample = get_subsample(raw_data.copy(), feature_labels, 3)
@@ -170,17 +169,16 @@ def downsampled_random_forest(preprocessor: ColumnTransformer,
                               X_train: pd.DataFrame,
                               X_test: pd.DataFrame,
                               y_train: pd.DataFrame,
-                              y_test: pd.DataFrame):
+                              y_test: pd.DataFrame,
+                              trees: int = 1000):
     """
-    Compensates for dramatic under-representation of desired target in data
-    by breaking training data into two groups, based on target, then batch
-    training on batches with equal representation of targets.
+    :param trees:
     :param y_test:
     :param y_train:
     :param X_test:
     :param X_train:
     :param preprocessor:
-    :param features:
+    :param feature_labels:
     :param filename:
     :param filename_pretty:
     :return:
@@ -194,7 +192,7 @@ def downsampled_random_forest(preprocessor: ColumnTransformer,
     print("Starting training...")
     clf = RandomForestClassifier(
         n_jobs=10, verbose=1,
-        n_estimators=1000, criterion='entropy',
+        n_estimators=trees, criterion='entropy',
         max_depth=None, max_features='sqrt',
         max_samples=None, class_weight='balanced_subsample'
     )

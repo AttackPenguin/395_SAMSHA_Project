@@ -139,21 +139,21 @@ def get_subsample(raw_data: pd.DataFrame,
 
     # Scenario where fx_term_ss is less than fx_term_raw: need to trim
     # non-terminated patients.
-    if fx_term_ss < fx_term_raw:
-        not_term = sub_sample[sub_sample['REASON'] != 3]
-        term = sub_sample[sub_sample['REASON'] == 3]
-        needed = int((len(term) / fx_term_raw) - len(term))
-        not_term = not_term.sample(needed)
-        sub_sample = pd.concat([term, not_term])
+    # if fx_term_ss < fx_term_raw:
+    #     not_term = sub_sample[sub_sample['REASON'] != 3]
+    #     term = sub_sample[sub_sample['REASON'] == 3]
+    #     needed = int((len(term) / fx_term_raw) - len(term))
+    #     not_term = not_term.sample(needed)
+    #     sub_sample = pd.concat([term, not_term])
 
     # Scenario where fx_term_ss is greater than fx_term_raw: need to trim
     # terminated patients.
-    if fx_term_ss > fx_term_raw:
-        not_term = sub_sample[sub_sample['REASON'] != 3]
-        term = sub_sample[sub_sample['REASON'] == 3]
-        needed = int((fx_term_raw * len(not_term)) / (1 - fx_term_raw))
-        term = term.sample(needed)
-        sub_sample = pd.concat([term, not_term])
+    # if fx_term_ss > fx_term_raw:
+    #     not_term = sub_sample[sub_sample['REASON'] != 3]
+    #     term = sub_sample[sub_sample['REASON'] == 3]
+    #     needed = int((fx_term_raw * len(not_term)) / (1 - fx_term_raw))
+    #     term = term.sample(needed)
+    #     sub_sample = pd.concat([term, not_term])
 
     print(f"Returning subsample of length {len(sub_sample)}")
     return sub_sample
