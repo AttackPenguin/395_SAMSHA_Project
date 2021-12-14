@@ -5,6 +5,7 @@ import os
 import pickle
 
 import numpy as np
+import openpyxl
 import pandas as pd
 from matplotlib import pyplot as plt
 
@@ -47,34 +48,34 @@ def main():
     #     file_name='Permutation Feature Importance, Preprocessor 01.pickle'
     # )
 
-    # destination = os.path.join(
-    #     performance_data_directory, "Permutation Feature Importance, "
-    #                                 "Preprocessor 01.pickle"
-    # )
-    # with open(destination, 'rb') as file:
-    #     results = pickle.load(file)
-    #
-    # fig_pf_importance(results,
-    #                   'Fig XX: Permutation Feature Importance, Preprocessor '
-    #                   '01',
-    #                   'Permutation Feature Importance, Preprocessor 01')
+    destination = os.path.join(
+        performance_data_directory, "Permutation Feature Importance, "
+                                    "Preprocessor 01.pickle"
+    )
+    with open(destination, 'rb') as file:
+        results = pickle.load(file)
+
+    fig_pf_importance(results,
+                      'Fig XX: Permutation Feature Importance, Preprocessor '
+                      '01',
+                      'Permutation Feature Importance, Preprocessor 01')
 
     ############################################################################
 
-    destination = os.path.join(
-        classifier_directory, "rf_prep_01_opt"
-    )
-    with open(destination, 'rb') as file:
-        preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
-            = pickle.load(file)
-
-    results = permutation_feature_importance(
-        preprocessing, rf_clf, roc_auc_score, feature_labels,
-        X_test, y_test, 20,
-        file_name='Permutation Feature Importance, Preprocessor 01 '
-                  'Optimized.pickle'
-    )
-
+    # destination = os.path.join(
+    #     classifier_directory, "rf_prep_01_opt"
+    # )
+    # with open(destination, 'rb') as file:
+    #     preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
+    #         = pickle.load(file)
+    #
+    # results = permutation_feature_importance(
+    #     preprocessing, rf_clf, roc_auc_score, feature_labels,
+    #     X_test, y_test, 20,
+    #     file_name='Permutation Feature Importance, Preprocessor 01 '
+    #               'Optimized.pickle'
+    # )
+    #
     destination = os.path.join(
         performance_data_directory, "Permutation Feature Importance, "
                                     "Preprocessor 01 Optimized.pickle"
@@ -90,19 +91,19 @@ def main():
 
     ############################################################################
 
-    destination = os.path.join(
-        classifier_directory, "rf_prep_02a"
-    )
-    with open(destination, 'rb') as file:
-        preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
-            = pickle.load(file)
-
-    results = permutation_feature_importance(
-        preprocessing, rf_clf, roc_auc_score, feature_labels,
-        X_test, y_test, 20,
-        file_name='Permutation Feature Importance, Preprocessor 02a.pickle'
-    )
-
+    # destination = os.path.join(
+    #     classifier_directory, "rf_prep_02a"
+    # )
+    # with open(destination, 'rb') as file:
+    #     preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
+    #         = pickle.load(file)
+    #
+    # results = permutation_feature_importance(
+    #     preprocessing, rf_clf, roc_auc_score, feature_labels,
+    #     X_test, y_test, 20,
+    #     file_name='Permutation Feature Importance, Preprocessor 02a.pickle'
+    # )
+    #
     destination = os.path.join(
         performance_data_directory, "Permutation Feature Importance, "
                                     "Preprocessor 02a.pickle"
@@ -117,19 +118,19 @@ def main():
 
     ############################################################################
 
-    destination = os.path.join(
-        classifier_directory, "rf_prep_02b"
-    )
-    with open(destination, 'rb') as file:
-        preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
-            = pickle.load(file)
-
-    results = permutation_feature_importance(
-        preprocessing, rf_clf, roc_auc_score, feature_labels,
-        X_test, y_test, 20,
-        file_name='Permutation Feature Importance, Preprocessor 02b.pickle'
-    )
-
+    # destination = os.path.join(
+    #     classifier_directory, "rf_prep_02b"
+    # )
+    # with open(destination, 'rb') as file:
+    #     preprocessing, rf_clf, feature_labels, X_train, X_test, y_train, y_test \
+    #         = pickle.load(file)
+    #
+    # results = permutation_feature_importance(
+    #     preprocessing, rf_clf, roc_auc_score, feature_labels,
+    #     X_test, y_test, 20,
+    #     file_name='Permutation Feature Importance, Preprocessor 02b.pickle'
+    # )
+    #
     destination = os.path.join(
         performance_data_directory, "Permutation Feature Importance, "
                                     "Preprocessor 02b.pickle"
@@ -163,12 +164,13 @@ def fig_pf_importance(results: dict[str, list[float]],
         importances[sorted_idx].T, vert=False,
         labels=np.array(list(results.keys()))[sorted_idx]
     )
-    ax.set_title(title)
+    # ax.set_title(title)
     ax.grid(axis='x')
     ax.set_xticks(
-        [0.000, 0.0025, 0.005, 0.0075, 0.010, 0.020, 0.030,
+        [0.000, 0.010, 0.020, 0.030,
          0.040, 0.050, 0.060, 0.070]
     )
+    ax.set_xlabel('ROC AUC Score Delta')
     fig.tight_layout()
     plt.show()
     destination = os.path.join(
@@ -176,6 +178,29 @@ def fig_pf_importance(results: dict[str, list[float]],
         file_name
     )
     fig.savefig(destination)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.cell(1, 1, 'Feature')
+    ws.cell(1, 2, 'Mean')
+    ws.cell(1, 3, 'Std Dev')
+    ws.cell(1, 4, 'Min')
+    ws.cell(1, 5, 'Median')
+    ws.cell(1, 6, 'Max')
+    row = 2
+    for result in results:
+        ws.cell(row, 1, result)
+        ws.cell(row, 2, np.mean(results[result]))
+        ws.cell(row, 3, np.std(results[result]))
+        ws.cell(row, 4, np.min(results[result]))
+        ws.cell(row, 5, np.median(results[result]))
+        ws.cell(row, 6, np.max(results[result]))
+        row += 1
+
+    wb.save(os.path.join(
+        performance_data_directory, file_name+'.xlsx'
+    ))
+
 
 
 def permutation_feature_importance(preprocessor,

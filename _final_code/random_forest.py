@@ -52,13 +52,13 @@ def subset_training():
     X_train, X_test, y_train, y_test = \
         train_test_split(subsample, targets,
                          test_size=0.1, stratify=targets)
-    downsampled_random_forest(preprocessor,
-                              feature_labels,
+    random_forest(preprocessor,
+                  feature_labels,
                               'rf_prep_01_opt_subsample',
                               'Random Forest, Preprocessor 01 Optimized, '
                               'Subsampled Data, Cutoff of 3',
-                              X_train, X_test, y_train, y_test,
-                              trees=1000)
+                  X_train, X_test, y_train, y_test,
+                  trees=1000)
 
     preprocessor, feature_labels = preprocessors.create_preprocessor_02a()
     subsample = get_subsample(raw_data.copy(), feature_labels, 3)
@@ -67,12 +67,12 @@ def subset_training():
     X_train, X_test, y_train, y_test = \
         train_test_split(subsample, targets,
                          test_size=0.1, stratify=targets)
-    downsampled_random_forest(preprocessor,
-                              feature_labels,
+    random_forest(preprocessor,
+                  feature_labels,
                               'rf_prep_02a_subsample',
                               'Random Forest, Preprocessor 02a, '
                               'Subsampled Data, Cutoff of 3',
-                              X_train, X_test, y_train, y_test)
+                  X_train, X_test, y_train, y_test)
 
     preprocessor, feature_labels = preprocessors.create_preprocessor_02b()
     subsample = get_subsample(raw_data.copy(), feature_labels, 3)
@@ -81,12 +81,12 @@ def subset_training():
     X_train, X_test, y_train, y_test = \
         train_test_split(subsample, targets,
                          test_size=0.1, stratify=targets)
-    downsampled_random_forest(preprocessor,
-                              feature_labels,
+    random_forest(preprocessor,
+                  feature_labels,
                               'rf_prep_02b_subsample',
                               'Random Forest, Preprocessor 02b, '
                               'Subsampled Data, Cutoff of 3',
-                              X_train, X_test, y_train, y_test)
+                  X_train, X_test, y_train, y_test)
 
     end_time = pd.Timestamp.now()
     print(f"Finished at {end_time}")
@@ -136,25 +136,25 @@ def initial_training():
     #                           X_train, X_test, y_train, y_test)
 
     preprocessor, feature_labels = preprocessors.create_preprocessor_01_opt()
-    downsampled_random_forest(preprocessor,
-                              feature_labels,
+    random_forest(preprocessor,
+                  feature_labels,
                               'rf_prep_01_opt',
                               'Random Forest, Preprocessor 01 Optimized',
-                              X_train, X_test, y_train, y_test)
+                  X_train, X_test, y_train, y_test)
 
     preprocessor, feature_labels = preprocessors.create_preprocessor_02a()
-    downsampled_random_forest(preprocessor,
-                              feature_labels,
+    random_forest(preprocessor,
+                  feature_labels,
                               'rf_prep_02a',
                               'Random Forest, Preprocessor 02a',
-                              X_train, X_test, y_train, y_test)
+                  X_train, X_test, y_train, y_test)
 
     preprocessor, feature_labels = preprocessors.create_preprocessor_02b()
-    downsampled_random_forest(preprocessor,
-                              feature_labels,
+    random_forest(preprocessor,
+                  feature_labels,
                               'rf_prep_02b',
                               'Random Forest, Preprocessor 02b',
-                              X_train, X_test, y_train, y_test)
+                  X_train, X_test, y_train, y_test)
 
     end_time = pd.Timestamp.now()
     print(f"Finished at {end_time}")
@@ -162,15 +162,15 @@ def initial_training():
           f"minutes.")
 
 
-def downsampled_random_forest(preprocessor: ColumnTransformer,
-                              feature_labels: list[str],
-                              filename: str,
-                              filename_pretty: str,
-                              X_train: pd.DataFrame,
-                              X_test: pd.DataFrame,
-                              y_train: pd.DataFrame,
-                              y_test: pd.DataFrame,
-                              trees: int = 1000):
+def random_forest(preprocessor: ColumnTransformer,
+                  feature_labels: list[str],
+                  filename: str,
+                  filename_pretty: str,
+                  X_train: pd.DataFrame,
+                  X_test: pd.DataFrame,
+                  y_train: pd.DataFrame,
+                  y_test: pd.DataFrame,
+                  trees: int = 1000):
     """
     :param trees:
     :param y_test:
